@@ -533,8 +533,6 @@ void TRTBEVFormerNode::callback(
   std::vector<cv::Mat> raw_images = {img_f, img_fr, img_fl, img_b, img_bl, img_br};
 
   // Processing can_bus data
-  auto seg2_start = std::chrono::high_resolution_clock::now();
-
   std::vector<float> ego2global_translation_data = {
     static_cast<float>(ego2global_trans.x()), static_cast<float>(ego2global_trans.y()),
     static_cast<float>(ego2global_trans.z())};

@@ -8,8 +8,8 @@
       to_rgb: false
       pad_divisor: 32
       scale_factor: 0.8
-      input_width: 1280
-      input_height: 720
+      input_width: 1600
+      input_height: 900
 
     model_params:
       bev_h: 150
