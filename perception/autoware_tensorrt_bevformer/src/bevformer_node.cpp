@@ -54,23 +54,18 @@ TRTBEVFormerNode::TRTBEVFormerNode(const rclcpp::NodeOptions & node_options)
   // Data parameters
   img_N_ = this->get_parameter_or("data_params.CAM_NUM", 6);
   this->declare_parameter<std::vector<double>>("data_params.mean", {103.530, 116.280, 123.675});
+  src_img_w_ = this->declare_parameter<int>("data_params.input_width", 1600);
+  src_img_h_ = this->declare_parameter<int>("data_params.input_height", 900);
   this->declare_parameter<std::vector<double>>("data_params.std", {1.0, 1.0, 1.0});
   this->declare_parameter<bool>("data_params.to_rgb", false);
   this->declare_parameter<int>("data_params.pad_divisor", 32);
   this->declare_parameter<double>("data_params.scale_factor", 0.8);
-  this->declare_parameter<int>("data_params.input_width", 1280);
-  this->declare_parameter<int>("data_params.input_height", 720);
 
   // Model parameters
-  bev_h = this->declare_parameter<int>("model_params.bev_h", 150);
-  bev_w = this->declare_parameter<int>("model_params.bev_w", 150);
-
   model_shape_params_["batch_size"] = this->declare_parameter<int>("model_params.batch_size", 1);
   model_shape_params_["cameras"] = this->declare_parameter<int>("data_params.CAM_NUM", 6);
-  model_shape_params_["img_h"] = this->declare_parameter<int>("model_params.img_h", 736);
-  model_shape_params_["img_w"] = this->declare_parameter<int>("model_params.img_w", 1280);
-  model_shape_params_["bev_h"] = bev_h;
-  model_shape_params_["bev_w"] = bev_w;
+  model_shape_params_["bev_h"] = this->declare_parameter<int>("model_params.bev_h", 150);
+  model_shape_params_["bev_w"] = this->declare_parameter<int>("model_params.bev_w", 150);
   model_shape_params_["nb_dec"] = this->declare_parameter<int>("model_params.nb_dec", 6);
   model_shape_params_["dim"] = this->declare_parameter<int>("model_params.dim", 256);
   model_shape_params_["num_query"] = this->declare_parameter<int>("model_params.num_query", 900);
@@ -121,6 +116,16 @@ TRTBEVFormerNode::TRTBEVFormerNode(const rclcpp::NodeOptions & node_options)
   // Initialize TF buffer and listener
   tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
+  // Create publisher for detected objects
+  pub_boxes_ = this->create_publisher<autoware_perception_msgs::msg::DetectedObjects>(
+    "~/output/boxes", rclcpp::QoS{1});
+
+  // Only create marker publisher if debug mode is enabled
+  if (debug_mode_) {
+    pub_markers_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+      "~/output_bboxes", rclcpp::QoS{1});
+  }
 
   // Initialize model and subscriptions
   RCLCPP_INFO(this->get_logger(), "Initializing TensorRT engine...");
@@ -218,20 +223,6 @@ void TRTBEVFormerNode::initModel()
   } catch (const std::exception & e) {
     RCLCPP_ERROR(
       this->get_logger(), "Exception during TensorRT engine initialization: %s", e.what());
-  }
-
-  // Allocate CUDA memory for images if needed
-  CHECK_CUDA(cudaMalloc(
-    reinterpret_cast<void **>(&imgs_dev_), img_N_ * 3 * img_w_ * img_h_ * sizeof(uchar)));
-
-  // Create publisher for detected objects
-  pub_boxes_ = this->create_publisher<autoware_perception_msgs::msg::DetectedObjects>(
-    "~/output/boxes", rclcpp::QoS{1});
-
-  // Only create marker publisher if debug mode is enabled
-  if (debug_mode_) {
-    pub_markers_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
-      "~/output_bboxes", rclcpp::QoS{1});
   }
 
   RCLCPP_INFO_STREAM(this->get_logger(), "BEVFormer initialization complete");
@@ -337,11 +328,6 @@ void TRTBEVFormerNode::cameraInfoCallback(
 {
   if (caminfo_received_[idx]) {
     return;  // already received
-  }
-  if (!initialized_) {
-    img_w_ = msg->width;
-    img_h_ = msg->height;
-    initialized_ = true;
   }
 
   // Get camera intrinsics
@@ -534,12 +520,12 @@ void TRTBEVFormerNode::callback(
   // Image convertion
   cv::Mat img_fl, img_f, img_fr, img_bl, img_b, img_br;
   try {
-    img_fl = cv_bridge::toCvShare(msg_fl_img, "bgr8")->image.clone();
-    img_f = cv_bridge::toCvShare(msg_f_img, "bgr8")->image.clone();
-    img_fr = cv_bridge::toCvShare(msg_fr_img, "bgr8")->image.clone();
-    img_bl = cv_bridge::toCvShare(msg_bl_img, "bgr8")->image.clone();
-    img_b = cv_bridge::toCvShare(msg_b_img, "bgr8")->image.clone();
-    img_br = cv_bridge::toCvShare(msg_br_img, "bgr8")->image.clone();
+    img_fl = cloneAndResize(msg_fl_img);
+    img_f  = cloneAndResize(msg_f_img);
+    img_fr = cloneAndResize(msg_fr_img);
+    img_bl = cloneAndResize(msg_bl_img);
+    img_b  = cloneAndResize(msg_b_img);
+    img_br = cloneAndResize(msg_br_img);
   } catch (cv_bridge::Exception & e) {
     RCLCPP_ERROR(this->get_logger(), "CV bridge exception: %s", e.what());
     return;
@@ -644,6 +630,16 @@ void TRTBEVFormerNode::callback(
   if (debug_mode_ && pub_markers_) {
     publishDebugMarkers(pub_markers_, bevformer_objects);
   }
+}
+
+// Helper function to clone and resize an image
+cv::Mat TRTBEVFormerNode::cloneAndResize(const sensor_msgs::msg::Image::ConstSharedPtr & msg)
+{
+  cv::Mat img = cv_bridge::toCvShare(msg, "bgr8")->image.clone();
+  if (img.size() != cv::Size(src_img_w_, src_img_h_)) {
+    cv::resize(img, img, cv::Size(src_img_w_, src_img_h_));
+  }
+  return img;
 }
 
 TRTBEVFormerNode::~TRTBEVFormerNode()

@@ -56,9 +56,6 @@ $HOME/autoware_data/tensorrt_bevformer
 ```
 
 - The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.
-  - **Results:**
-    - NDS: 0.478
-    - mAP: 0.370
 
 ### Test TensorRT BEVFormer Node with NuScenes
 
@@ -110,22 +107,20 @@ $HOME/autoware_data/tensorrt_bevformer
    ```
 
    > **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
-   >
-   > **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** on RTX 2080.
 
 5. Launch TensorRT BEVFormer Node
 
 ```bash
-# 1. Default mode (FP16)
+# Default mode (FP16)
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml
 
-# 2. FP32 precision mode
+# FP32 precision
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32
 
-# 3. Default mode (FP16) with visualization support
+# With visualization
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml debug_mode:=true
 
-# 4. FP32 precision mode with visualization support
+# FP32 + visualization
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32 debug_mode:=true
 ```
 
@@ -139,10 +134,6 @@ The configuration file in `config/bevformer.param.yaml` can be modified to suit 
 ## Limitation
 
 The model is trained on the open-source dataset **NuScenes** and may have poor generalization on your own dataset. If you want to use this model for your data, you need to retrain it.
-
-## Training BEVFormer Model
-
-If you want to train a model using the [TIER IV's internal database (~2600 key frames)](https://drive.google.com/file/d/1UaarK88HZu09sf7Ix-bEVl9zGNGFwTVL/view?usp=sharing), please refer to: [BEVFormer adapted to TIER IV dataset](https://github.com/cyn-liu/BEVDet/tree/train_export).
 
 ## References/External links
 

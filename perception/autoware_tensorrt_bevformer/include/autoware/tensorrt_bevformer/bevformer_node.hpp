@@ -57,8 +57,8 @@ class TRTBEVFormerNode : public rclcpp::Node
 {
 private:
   size_t img_N_;
-  uint32_t img_w_;
-  uint32_t img_h_;
+  uint32_t src_img_w_;
+  uint32_t src_img_h_;
   int bev_h;
   int bev_w;
   std::map<std::string, int> model_shape_params_;
@@ -137,7 +137,6 @@ private:
   std::vector<bool>
     caminfo_received_;  // Flag indicating if camera info has been received for each camera
   bool camera_info_received_flag_ = false;
-  bool initialized_ = false;  // Flag indicating if img_w_ and img_h_ has been initialized
 
   // can_bus and scene_info subscriptions
   message_filters::Subscriber<autoware_custom_msgs::msg::CanBusData> sub_can_bus_;
@@ -213,6 +212,13 @@ private:
   std::vector<float> processCanBusData(
     const std::vector<float> & ego2global_translation,
     const std::vector<float> & ego2global_rotation, const std::vector<float> & raw_can_bus);
+
+  /**
+   * @brief Clones and resizes the input image message to the specified width and height.
+   * @param msg The input image message.
+   * @return The cloned and resized OpenCV Mat image.
+   */
+  cv::Mat cloneAndResize(const sensor_msgs::msg::Image::ConstSharedPtr & msg); 
 
 public:
   explicit TRTBEVFormerNode(const rclcpp::NodeOptions & options);

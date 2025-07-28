@@ -126,7 +126,7 @@ void publishDebugMarkers(
     pose.position.y = -pose.position.y;
 
     pose.position.y += 0.2;  // Tune this value as needed
-    pose.position.x += 0.5;  // Tune this value as needed
+    pose.position.x += 0.7;  // Tune this value as needed
 
     pose.position.z =
       std::max(0.0f, static_cast<float>(pose.position.z)) + obj.shape.dimensions.z - 1.2;
