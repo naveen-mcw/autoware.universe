@@ -10,13 +10,14 @@
 
 ## Trained Models
 
-Download the [`bevformer_small.onnx`](https://drive.google.com/file/d/1qHyfHnP3sveT3cJ8XHjfVL0UQHcG5zqg/view?usp=sharing) trained model to:
+Download the [`bevformer_small.onnx`]([https://drive.google.com/file/d/1qHyfHnP3sveT3cJ8XHjfVL0UQHcG5zqg/view?usp=sharing](https://multicorewareinc1-my.sharepoint.com/:u:/g/personal/naveen_sathiyaseelan_multicorewareinc_com/ERQSpS-BoAZGh4R4zNZhITcB58aqDW_tu9aKHLpit6aLAg?e=IZ5nZN)) trained model to:
 
 ```bash
 $HOME/autoware_data/tensorrt_bevformer
 ```
 
 - The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.
+  
   - **Results:**
     - NDS: 0.478
     - mAP: 0.370
@@ -39,8 +40,7 @@ Add this branch to your `autoware_universe/perception` directory.
   cd ..
 ```
 
-> **Note:**  
-> The `feature/bevformer-integration` branch provides required data for the BEVFormer.
+> **Note:**  The `feature/bevformer-integration` branch provides required data for the BEVFormer.
 
 Open and edit the launch file to set dataset paths/configs:
 
