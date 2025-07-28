@@ -39,7 +39,7 @@ public:
    */
   BEVPreprocessingPipeline(
     const std::vector<float> & img_mean, const std::vector<float> & img_std, bool to_rgb,
-    int pad_divisor, float scale_factor, int input_width, int input_height);
+    int pad_divisor, float scale_factor);
 
   /**
    * Process images through the pipeline

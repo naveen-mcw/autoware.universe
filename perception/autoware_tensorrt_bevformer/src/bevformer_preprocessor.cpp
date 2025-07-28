@@ -40,13 +40,9 @@ BEVFormerPreprocessor::BEVFormerPreprocessor(const rclcpp::Logger & logger, rclc
 
   scale_factor_ = static_cast<float>(node->get_parameter("data_params.scale_factor").as_double());
 
-  int input_width = node->get_parameter("data_params.input_width").as_int();
-
-  int input_height = node->get_parameter("data_params.input_height").as_int();
-
   try {
     pipeline_ = std::make_unique<bevformer::preprocessing::BEVPreprocessingPipeline>(
-      mean_, std_, to_rgb_, pad_divisor_, scale_factor_, input_width, input_height);
+      mean_, std_, to_rgb_, pad_divisor_, scale_factor_);
   } catch (const std::exception & e) {
     RCLCPP_ERROR(logger_, "Failed to create preprocessing pipeline: %s", e.what());
     throw;

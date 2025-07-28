@@ -88,8 +88,6 @@ private:
   bool to_rgb_;
   int pad_divisor_;
   float scale_factor_;
-  int input_width_;
-  int input_height_;
 };
 
 }  // namespace tensorrt_bevformer

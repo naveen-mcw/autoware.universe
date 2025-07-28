@@ -36,8 +36,7 @@ public:
    * @param img_scale Target image scale (width, height)
    */
   MultiScaleFlipAug3D(
-    const std::vector<std::shared_ptr<Transform>> & transforms,
-    const std::pair<int, int> & img_scale);
+    const std::vector<std::shared_ptr<Transform>> & transforms);
 
   /**
    * @brief Apply the transformation pipeline to input data
@@ -52,7 +51,6 @@ public:
   std::string toString() const;
 
 private:
-  std::pair<int, int> img_scale_;     // Target image scale
   std::shared_ptr<Compose> compose_;  // Composition of transforms
 };
 

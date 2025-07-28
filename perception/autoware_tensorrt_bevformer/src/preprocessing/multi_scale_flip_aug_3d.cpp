@@ -26,8 +26,7 @@ namespace preprocessing
 {
 
 MultiScaleFlipAug3D::MultiScaleFlipAug3D(
-  const std::vector<std::shared_ptr<Transform>> & transforms, const std::pair<int, int> & img_scale)
-: img_scale_(img_scale)
+  const std::vector<std::shared_ptr<Transform>> & transforms)
 {
   compose_ = std::make_shared<Compose>(transforms);
 }
@@ -47,9 +46,7 @@ DataDict MultiScaleFlipAug3D::operator()(DataDict results)
 
 std::string MultiScaleFlipAug3D::toString() const
 {
-  return "MultiScaleFlipAug3D(img_scale=(" + std::to_string(img_scale_.first) + ", " +
-         std::to_string(img_scale_.second) +
-         "), transforms=" + (compose_ ? compose_->toString() : "none") + ")";
+  return "MultiScaleFlipAug3D(transforms=" + (compose_ ? compose_->toString() : "none") + ")";
 }
 
 }  // namespace preprocessing

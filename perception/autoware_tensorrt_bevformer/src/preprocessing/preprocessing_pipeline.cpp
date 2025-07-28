@@ -28,7 +28,7 @@ namespace preprocessing
 
 BEVPreprocessingPipeline::BEVPreprocessingPipeline(
   const std::vector<float> & img_mean, const std::vector<float> & img_std, bool to_rgb,
-  int pad_divisor, float scale_factor, int input_width, int input_height)
+  int pad_divisor, float scale_factor)
 {
   try {
     normalize_multiview_images_ =
@@ -46,7 +46,7 @@ BEVPreprocessingPipeline::BEVPreprocessingPipeline(
     transforms.push_back(format_bundle);
 
     multi_scale_flip_aug_ =
-      std::make_shared<MultiScaleFlipAug3D>(transforms, std::make_pair(input_width, input_height));
+      std::make_shared<MultiScaleFlipAug3D>(transforms);
   } catch (const std::bad_alloc & e) {
     std::cerr << "Memory allocation failed in BEVPreprocessingPipeline: " << e.what() << std::endl;
     throw;
