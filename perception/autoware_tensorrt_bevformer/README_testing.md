@@ -2,9 +2,9 @@
 
 ## Prerequisites
 
-- **TensorRT** 10.8.0.43  
-- **CUDA** 12.4  
-- **cuDNN** 8.9.2  
+- **TensorRT** 10.8.0.43
+- **CUDA** 12.4
+- **cuDNN** 8.9.2
 
 ---
 
@@ -16,10 +16,10 @@ Download the [`bevformer_small.onnx`](https://drive.google.com/file/d/1qHyfHnP3s
 $HOME/autoware_data/tensorrt_bevformer
 ```
 
-- The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.  
-  - **Results:**  
-    - NDS: 0.478  
-    - mAP: 0.370  
+- The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.
+  - **Results:**
+    - NDS: 0.478
+    - mAP: 0.370
 
 ---
 
@@ -37,10 +37,10 @@ Add this branch to your `autoware_universe/perception` directory.
   cd autoware/src
   git clone -b feature/bevformer-integration https://github.com/naveen-mcw/ros2_dataset_bridge.git
   cd ..
-  ```
+```
 
-  > **Note:**  
-  > The `feature/bevformer-integration` branch provides required data for the BEVFormer.
+> **Note:**  
+> The `feature/bevformer-integration` branch provides required data for the BEVFormer.
 
 Open and edit the launch file to set dataset paths/configs:
 
@@ -76,12 +76,13 @@ Launch tools:
 ros2 launch ros2_dataset_bridge nuscenes_launch.xml
 ```
 
-> 🧠 **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
-> ⚠️ **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** in RTX 2080.
+> **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
+>
+> **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** in RTX 2080.
 
 ---
 
-### 4️⃣ Launch TensorRT BEVFormer Node
+### 3. Launch TensorRT BEVFormer Node
 
 ```bash
 # Default (FP16) with visuliazation support
@@ -93,7 +94,7 @@ ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:
 
 ---
 
-## ✨ Acknowledgements
+## Acknowledgements
 
 - [BEVFormer: Incorporating Transformers for Multi-Camera 3D Detection](https://arxiv.org/abs/2203.17270)
 - TensorRT acceleration by [NVIDIA](https://developer.nvidia.com/tensorrt)
