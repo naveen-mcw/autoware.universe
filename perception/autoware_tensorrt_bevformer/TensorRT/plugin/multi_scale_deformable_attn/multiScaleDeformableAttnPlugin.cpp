@@ -24,9 +24,9 @@
 #include "multiScaleDeformableAttnKernel.h"
 #include "serialize.h"
 
-#include <cuda_fp16.h>
 #include <NvInfer.h>
 #include <NvInferPlugin.h>
+#include <cuda_fp16.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -35,10 +35,10 @@
 
 using nvinfer1::DataType;
 using nvinfer1::Dims;
-using nvinfer1::PluginField;
-using nvinfer1::PluginFieldCollection;
 using nvinfer1::DimsExprs;
 using nvinfer1::IPluginV2DynamicExt;
+using nvinfer1::PluginField;
+using nvinfer1::PluginFieldCollection;
 using trt_plugin::MultiScaleDeformableAttnPlugin;
 using trt_plugin::MultiScaleDeformableAttnPluginCreator;
 using trt_plugin::MultiScaleDeformableAttnPluginCreator2;

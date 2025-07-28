@@ -18,19 +18,18 @@
 // Modified by AutoCore, Inc. in 2025.
 // Original creation by Derry Lin on 2022/10/22.
 
-#ifndef TENSORRT_OPS_CUDA_HELPER_H
-#define TENSORRT_OPS_CUDA_HELPER_H
+#ifndef UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__CUDA_HELPER_H_
+#define UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__CUDA_HELPER_H_
 
-#include <cstdio>
 #include <cublas_v2.h>
 #include <cuda.h>
-#include <iostream>
 
 #include <algorithm>
+#include <cstdio>
+#include <iostream>
 
-#define CUDA_1D_KERNEL_LOOP(i, n)                                              \
-  for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < (n);                 \
-       i += blockDim.x * gridDim.x)
+#define CUDA_1D_KERNEL_LOOP(i, n) \
+  for (int i = blockIdx.x * blockDim.x + threadIdx.x; i < (n); i += blockDim.x * gridDim.x)
 
 #define THREADS_PER_BLOCK 512
 
@@ -46,14 +45,13 @@
 //    return optimal_block_num;
 //}
 
-#define cudaCheckError()                                                       \
-  {                                                                            \
-    cudaError_t e = cudaGetLastError();                                        \
-    if (e != cudaSuccess) {                                                    \
-      printf("Cuda failure %s:%d: '%s'\n", __FILE__, __LINE__,                 \
-             cudaGetErrorString(e));                                           \
-      exit(0);                                                                 \
-    }                                                                          \
+#define cudaCheckError()                                                               \
+  {                                                                                    \
+    cudaError_t e = cudaGetLastError();                                                \
+    if (e != cudaSuccess) {                                                            \
+      printf("Cuda failure %s:%d: '%s'\n", __FILE__, __LINE__, cudaGetErrorString(e)); \
+      exit(0);                                                                         \
+    }                                                                                  \
   }
 
 /**
@@ -67,60 +65,54 @@
  * @param[in] stream cuda stream handle
  */
 template <class scalar_t>
-void memcpyPermute(scalar_t *dst, const scalar_t *src, int *src_size,
-                   int *permute, int src_dim, cudaStream_t stream = 0);
+void memcpyPermute(
+  scalar_t * dst, const scalar_t * src, int * src_size, int * permute, int src_dim,
+  cudaStream_t stream = 0);
 
 template <typename scalar_t>
-cublasStatus_t
-cublasGemmWrap(cublasHandle_t handle, cublasOperation_t transa,
-               cublasOperation_t transb, int m, int n, int k,
-               const scalar_t *alpha, const scalar_t *A, int lda,
-               const scalar_t *B, int ldb, const scalar_t *beta, scalar_t *C,
-               int ldc, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+cublasStatus_t cublasGemmWrap(
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const scalar_t * alpha, const scalar_t * A, int lda, const scalar_t * B, int ldb,
+  const scalar_t * beta, scalar_t * C, int ldc,
+  cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 cublasStatus_t cublasGemmWrap_int8(
-    cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
-    int m, int n, int k, const int32_t *alpha, const int8_t *A, int lda,
-    const int8_t *B, int ldb, const int32_t *beta, int32_t *C, int ldc,
-    cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const int32_t * alpha, const int8_t * A, int lda, const int8_t * B, int ldb, const int32_t * beta,
+  int32_t * C, int ldc, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 template <typename scalar_t>
 cublasStatus_t cublasGemmBatchedWrap(
-    cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
-    int m, int n, int k, const scalar_t *alpha, const scalar_t *const Aarray[],
-    int lda, const scalar_t *const Barray[], int ldb, const scalar_t *beta,
-    scalar_t *const Carray[], int ldc, int batchCount,
-    cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const scalar_t * alpha, const scalar_t * const Aarray[], int lda, const scalar_t * const Barray[],
+  int ldb, const scalar_t * beta, scalar_t * const Carray[], int ldc, int batchCount,
+  cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 cublasStatus_t cublasGemmBatchedWrap_int8(
-    cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
-    int m, int n, int k, const int32_t *alpha, const int8_t *const Aarray[],
-    int lda, const int8_t *const Barray[], int ldb, const int32_t *beta,
-    const int32_t *const Carray[], int ldc, int batchCount,
-    cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const int32_t * alpha, const int8_t * const Aarray[], int lda, const int8_t * const Barray[],
+  int ldb, const int32_t * beta, const int32_t * const Carray[], int ldc, int batchCount,
+  cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 template <typename scalar_t>
 cublasStatus_t cublasGemmStridedBatchedWrap(
-    cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
-    int m, int n, int k, const scalar_t *alpha, const scalar_t *A, int lda,
-    long long int strideA, const scalar_t *B, int ldb, long long int strideB,
-    const scalar_t *beta, scalar_t *C, int ldc, long long int strideC,
-    int batchCount, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const scalar_t * alpha, const scalar_t * A, int lda, long long int strideA, const scalar_t * B,
+  int ldb, long long int strideB, const scalar_t * beta, scalar_t * C, int ldc,
+  long long int strideC, int batchCount, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 cublasStatus_t cublasGemmStridedBatchedWrap_int8(
-    cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb,
-    int m, int n, int k, const int32_t *alpha, const int8_t *A, int lda,
-    long long int strideA, const int8_t *B, int ldb, long long int strideB,
-    const int32_t *beta, const int32_t *C, int ldc, long long int strideC,
-    int batchCount, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
+  cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, int k,
+  const int32_t * alpha, const int8_t * A, int lda, long long int strideA, const int8_t * B,
+  int ldb, long long int strideB, const int32_t * beta, const int32_t * C, int ldc,
+  long long int strideC, int batchCount, cublasGemmAlgo_t algo = CUBLAS_GEMM_DFALT_TENSOR_OP);
 
 template <typename scalar_t>
-__device__ __forceinline__ scalar_t
-bilinear_interpolate(const scalar_t *__restrict__ input, const int height,
-                     const int width, scalar_t y, scalar_t x) {
+__device__ __forceinline__ scalar_t bilinear_interpolate(
+  const scalar_t * __restrict__ input, const int height, const int width, scalar_t y, scalar_t x)
+{
   // deal with cases that inverse elements are out of feature map boundary
-  if (y < -1.0 || y > height || x < -1.0 || x > width)
-    return 0;
+  if (y < -1.0 || y > height || x < -1.0 || x > width) return 0;
 
   y = min(scalar_t(height - 1), max(scalar_t(0), y));
   x = min(scalar_t(width - 1), max(scalar_t(0), x));
@@ -145,4 +137,4 @@ bilinear_interpolate(const scalar_t *__restrict__ input, const int height,
   return val;
 }
 
-#endif // TENSORRT_OPS_CUDA_HELPER_H
+#endif  // UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__CUDA_HELPER_H_

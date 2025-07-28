@@ -18,28 +18,29 @@
 // Modified by AutoCore, Inc. in 2025.
 // Original creation by Derry Lin on 2022/10/22.
 
-#ifndef TENSORRT_OPS_ROTATEKERNEL_H
-#define TENSORRT_OPS_ROTATEKERNEL_H
+#ifndef UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__PLUGIN__ROTATE__ROTATEKERNEL_H_  // NOLINT
+#define UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__PLUGIN__ROTATE__ROTATEKERNEL_H_  // NOLINT
 
 #include "cuda_int8.h"
+
+#include <NvInfer.h>
 #include <cuda_fp16.h>
 #include <cuda_runtime.h>
-#include <NvInfer.h>
 
 enum class RotateInterpolation { Bilinear, Nearest };
 
 template <typename T>
-void rotate(T *output, const T *input, const T *angle, const T *center, const int64_t *input_dims,
-            RotateInterpolation interp, cudaStream_t stream);
+void rotate(
+  T * output, const T * input, const T * angle, const T * center, const int64_t * input_dims,
+  RotateInterpolation interp, cudaStream_t stream);
 
-void rotate_h2(__half2 *output, const __half2 *input, const __half *angle, const __half *center,
-               const int64_t *input_dims, RotateInterpolation interp,
-               cudaStream_t stream);
+void rotate_h2(
+  __half2 * output, const __half2 * input, const __half * angle, const __half * center,
+  const int64_t * input_dims, RotateInterpolation interp, cudaStream_t stream);
 
 template <typename T>
-void rotate_int8(int8_4 *output, float scale_o, const int8_4 *input,
-                 float scale_i, const T *angle, const T *center,
-                 const int64_t *input_dims, RotateInterpolation interp,
-                 cudaStream_t stream);
+void rotate_int8(
+  int8_4 * output, float scale_o, const int8_4 * input, float scale_i, const T * angle,
+  const T * center, const int64_t * input_dims, RotateInterpolation interp, cudaStream_t stream);
 
-#endif // TENSORRT_OPS_ROTATEKERNEL_H
+#endif  // UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__PLUGIN__ROTATE__ROTATEKERNEL_H_

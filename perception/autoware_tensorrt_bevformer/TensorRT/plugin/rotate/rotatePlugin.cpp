@@ -24,9 +24,9 @@
 #include "rotateKernel.h"
 #include "serialize.h"
 
-#include <cuda_fp16.h>
 #include <NvInfer.h>
 #include <NvInferPlugin.h>
+#include <cuda_fp16.h>
 
 #include <algorithm>
 #include <cstdio>
@@ -36,10 +36,10 @@
 
 using nvinfer1::DataType;
 using nvinfer1::Dims;
-using nvinfer1::PluginField;
-using nvinfer1::PluginFieldCollection;
 using nvinfer1::DimsExprs;
 using nvinfer1::IPluginV2DynamicExt;
+using nvinfer1::PluginField;
+using nvinfer1::PluginFieldCollection;
 using trt_plugin::RotatePlugin;
 using trt_plugin::RotatePluginCreator;
 using trt_plugin::RotatePluginCreator2;

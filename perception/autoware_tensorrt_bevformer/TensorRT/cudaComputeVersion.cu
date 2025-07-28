@@ -1,6 +1,7 @@
 #include <cstdio>
 
-int main() {
+int main()
+{
   cudaDeviceProp prop;
   cudaGetDeviceProperties(&prop, 0);
   int v = prop.major * 10 + prop.minor;

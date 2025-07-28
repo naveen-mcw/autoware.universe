@@ -27,7 +27,7 @@
 
 * interpolation_mode: int
 
-  Interpolation mode to calculate output values. (0: `bilinear` , 1: `nearest`, 2: `bicubic`) 
+  Interpolation mode to calculate output values. (0: `bilinear` , 1: `nearest`, 2: `bicubic`)
 
   Note:  `bicubic` supports only 4-D input.
 
@@ -56,7 +56,7 @@
 
 * value: T[float/half/half2/int8]
 
-  Tensor shape: `[N, num_keys, mum_heads, channel]` 
+  Tensor shape: `[N, num_keys, mum_heads, channel]`
 
 * value_spatial_shapes: T[int32]
 
@@ -66,21 +66,21 @@
 
   The reference points.
 
-  Tensor shape: `[N, num_queries, 1, points_per_group * 2]` 
+  Tensor shape: `[N, num_queries, 1, points_per_group * 2]`
 
 * sampling_offsets: T[float/half/half2/int8]
 
   The offset of sampling points.
 
-  Tensor shape: `[N, num_queries, num_heads, num_levels * num_points * 2]` 
+  Tensor shape: `[N, num_queries, num_heads, num_levels * num_points * 2]`
 
 * attention_weights: T[float/half/int8]
 
-  The weight of sampling points used when calculate the attention (before softmax), has shape` [N ,num_queries, num_heads, num_levels * num_points]`.
+  The weight of sampling points used when calculate the attention (before softmax), has shape`[N ,num_queries, num_heads, num_levels * num_points]`.
 
 #### Attributes
 
-​	-
+​ -
 
 #### Outputs
 
@@ -99,7 +99,7 @@
 
 * input: T[float/half/half2/int8]
 
-  Tensor shape: `[N, C_in, H_in, W_in]` 
+  Tensor shape: `[N, C_in, H_in, W_in]`
 
 * offset: T[float/half/half2/int8]
 
@@ -158,7 +158,7 @@
 
 * img: T[float/half/half2/int8]
 
-  Tensor shape: `[C, H, W]` 
+  Tensor shape: `[C, H, W]`
 
 * angle: T[float/half/half2]
 
@@ -168,12 +168,11 @@
 
   Tensor shape: `[2]`
 
-
 #### Attributes
 
 * interpolation: int
 
-  Interpolation mode to calculate output values. (0: `bilinear` , 1: `nearest`) 
+  Interpolation mode to calculate output values. (0: `bilinear` , 1: `nearest`)
 
 #### Outputs
 
@@ -191,7 +190,7 @@
 
 * input: T[float]
 
-  Tensor shape: `[B, C, H, W]` 
+  Tensor shape: `[B, C, H, W]`
 
 #### Outputs
 
@@ -210,7 +209,7 @@
 
 * depth: T[float/half/half2/int8]
 
-  Tensor shape: `[Cam, D, H, W]` 
+  Tensor shape: `[Cam, D, H, W]`
 
 * feat: T[float/half/half2/int8]
 
@@ -225,7 +224,6 @@
 * interval_starts: T[int32]
 
 * interval_lengths: T[int32]
-
 
 #### Attributes
 
@@ -254,7 +252,7 @@
 
 * query: T[float/half/half2/int8]
 
-  Tensor shape: `[batch, q_len, channel]` 
+  Tensor shape: `[batch, q_len, channel]`
 
 * key: T[float/half/half2/int8]
 
@@ -266,12 +264,12 @@
 
 #### Attributes
 
-​	-
+​ -
 
 #### Outputs
 
 * output: T[float/half/half2/int8]
 
-  Tensor shape: `[batch, q_len, channel]` 
+  Tensor shape: `[batch, q_len, channel]`
 
 **NOTE: If `q_len` and `kv_len` are both multiples of 64, the plugin will run with Flash Multi-Head Attention (FMHA), else Naive Multi-Head Attention (NMHA).**

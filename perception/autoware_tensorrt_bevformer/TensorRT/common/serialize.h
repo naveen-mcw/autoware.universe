@@ -18,40 +18,46 @@
 // Modified by AutoCore, Inc. in 2025.
 // Original creation by Derry Lin on 2022/10/22.
 
-#ifndef TENSORRT_OPS_SERIALIZE_H
-#define TENSORRT_OPS_SERIALIZE_H
+#ifndef UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__SERIALIZE_H_  // NOLINT
+#define UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__SERIALIZE_H_  // NOLINT
 
 #include <cassert>
+#include <cstdio>
 #include <cstring>
+#include <iostream>
 #include <type_traits>
 #include <vector>
-
-#include <iostream>
 using std::cerr;
 using std::cout;
 using std::endl;
 
 template <typename T>
-inline void serialize_value(void **buffer, T const &value);
+inline void serialize_value(void ** buffer, T const & value);
 
 template <typename T>
-inline void deserialize_value(void const **buffer, size_t *buffer_size,
-                              T *value);
+inline void deserialize_value(void const ** buffer, size_t * buffer_size, T * value);
 
-namespace {
+namespace
+{
 
-template <typename T, class Enable = void> struct Serializer {};
+template <typename T, class Enable = void>
+struct Serializer
+{
+};
 
 template <typename T>
-struct Serializer<T, typename std::enable_if<std::is_arithmetic<T>::value ||
-                                             std::is_enum<T>::value ||
-                                             std::is_pod<T>::value>::type> {
+struct Serializer<
+  T, typename std::enable_if<
+       std::is_arithmetic<T>::value || std::is_enum<T>::value || std::is_pod<T>::value>::type>
+{
   static size_t serialized_size(T const &) { return sizeof(T); }
-  static void serialize(void **buffer, T const &value) {
+  static void serialize(void ** buffer, T const & value)
+  {
     ::memcpy(*buffer, &value, sizeof(T));
     reinterpret_cast<char *&>(*buffer) += sizeof(T);
   }
-  static void deserialize(void const **buffer, size_t *buffer_size, T *value) {
+  static void deserialize(void const ** buffer, size_t * buffer_size, T * value)
+  {
     assert(*buffer_size >= sizeof(T));
     ::memcpy(value, *buffer, sizeof(T));
     reinterpret_cast<char const *&>(*buffer) += sizeof(T);
@@ -59,14 +65,17 @@ struct Serializer<T, typename std::enable_if<std::is_arithmetic<T>::value ||
   }
 };
 
-template <> struct Serializer<const char *> {
-  static size_t serialized_size(const char *value) { return strlen(value) + 1; }
-  static void serialize(void **buffer, const char *value) {
-    ::strcpy(static_cast<char *>(*buffer), value);
-    reinterpret_cast<char *&>(*buffer) += strlen(value) + 1;
+template <>
+struct Serializer<const char *>
+{
+  static size_t serialized_size(const char * value) { return strlen(value) + 1; }
+  static void serialize(void ** buffer, const char * value)
+  {
+    snprintf(static_cast<char *>(*buffer), serialized_size(value), "%s", value);
+    reinterpret_cast<char *&>(*buffer) += serialized_size(value);
   }
-  static void deserialize(void const **buffer, size_t *buffer_size,
-                          const char **value) {
+  static void deserialize(void const ** buffer, size_t * buffer_size, const char ** value)
+  {
     *value = static_cast<char const *>(*buffer);
     size_t data_size = strnlen(*value, *buffer_size) + 1;
     assert(*buffer_size >= data_size);
@@ -76,21 +85,24 @@ template <> struct Serializer<const char *> {
 };
 
 template <typename T>
-struct Serializer<std::vector<T>,
-                  typename std::enable_if<std::is_arithmetic<T>::value ||
-                                          std::is_enum<T>::value ||
-                                          std::is_pod<T>::value>::type> {
-  static size_t serialized_size(std::vector<T> const &value) {
+struct Serializer<
+  std::vector<T>,
+  typename std::enable_if<
+    std::is_arithmetic<T>::value || std::is_enum<T>::value || std::is_pod<T>::value>::type>
+{
+  static size_t serialized_size(std::vector<T> const & value)
+  {
     return sizeof(value.size()) + value.size() * sizeof(T);
   }
-  static void serialize(void **buffer, std::vector<T> const &value) {
+  static void serialize(void ** buffer, std::vector<T> const & value)
+  {
     serialize_value(buffer, value.size());
     size_t nbyte = value.size() * sizeof(T);
     ::memcpy(*buffer, value.data(), nbyte);
     reinterpret_cast<char *&>(*buffer) += nbyte;
   }
-  static void deserialize(void const **buffer, size_t *buffer_size,
-                          std::vector<T> *value) {
+  static void deserialize(void const ** buffer, size_t * buffer_size, std::vector<T> * value)
+  {
     size_t size;
     deserialize_value(buffer, buffer_size, &size);
     value->resize(size);
@@ -102,21 +114,24 @@ struct Serializer<std::vector<T>,
   }
 };
 
-} // namespace
+}  // namespace
 
-template <typename T> inline size_t serialized_size(T const &value) {
+template <typename T>
+inline size_t serialized_size(T const & value)
+{
   return Serializer<T>::serialized_size(value);
 }
 
 template <typename T>
-inline void serialize_value(void **buffer, T const &value) {
+inline void serialize_value(void ** buffer, T const & value)
+{
   return Serializer<T>::serialize(buffer, value);
 }
 
 template <typename T>
-inline void deserialize_value(void const **buffer, size_t *buffer_size,
-                              T *value) {
+inline void deserialize_value(void const ** buffer, size_t * buffer_size, T * value)
+{
   return Serializer<T>::deserialize(buffer, buffer_size, value);
 }
 
-#endif // TENSORRT_OPS_SERIALIZE_H
+#endif  // UNIVERSE__AUTOWARE_UNIVERSE__PERCEPTION__AUTOWARE_TENSORRT_BEVFORMER__TENSORRT__COMMON__SERIALIZE_H_
