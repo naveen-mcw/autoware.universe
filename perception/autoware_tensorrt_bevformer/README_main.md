@@ -49,7 +49,7 @@ The core algorithm, named `BEVFormer`, unifies multi-view images into the BEV pe
 
 ### Trained Models
 
-Download the [`bevformer_small.onnx`](https://drive.google.com/file/d/1qHyfHnP3sveT3cJ8XHjfVL0UQHcG5zqg/view?usp=sharing) trained model to:
+Download the [`bevformer_small.onnx`](https://multicorewareinc1-my.sharepoint.com/:u:/g/personal/naveen_sathiyaseelan_multicorewareinc_com/ERQSpS-BoAZGh4R4zNZhITcB58aqDW_tu9aKHLpit6aLAg?e=IZ5nZN) trained model to:
 
 ```bash
 $HOME/autoware_data/tensorrt_bevformer
