@@ -29,7 +29,6 @@
 #include <Eigen/Geometry>
 #include <rclcpp/logging.hpp>
 
-#include "autoware_custom_msgs/msg/camera_data.hpp"
 #include "autoware_custom_msgs/msg/can_bus_data.hpp"
 #include "autoware_custom_msgs/msg/scene_info.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
