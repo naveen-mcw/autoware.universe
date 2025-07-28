@@ -55,10 +55,10 @@ set(TENSORRT_LIBS nvinfer nvinfer_plugin nvonnxparser)
 
 # Build TensorRT plugins library first
 # Get all TensorRT plugin source files
-file(GLOB_RECURSE TENSORRT_SRCS 
-  TensorRT/common/*.cpp 
-  TensorRT/common/*.cu 
-  TensorRT/plugin/*/*.cpp 
+file(GLOB_RECURSE TENSORRT_SRCS
+  TensorRT/common/*.cpp
+  TensorRT/common/*.cu
+  TensorRT/plugin/*/*.cpp
   TensorRT/plugin/*/*.cu
 )
 
@@ -83,7 +83,7 @@ set(CMAKE_CUDA_FLAGS_MINSIZEREL "")
 set_property(TARGET ${TENSORRT_OPS_TARGET} PROPERTY CUDA_ARCHITECTURES ${ARCH})
 
 # Set target properties to handle CUDA compilation properly
-set_target_properties(${TENSORRT_OPS_TARGET} PROPERTIES 
+set_target_properties(${TENSORRT_OPS_TARGET} PROPERTIES
   CUDA_SEPARABLE_COMPILATION ON
   CUDA_RESOLVE_DEVICE_SYMBOLS ON
 )
@@ -95,7 +95,7 @@ set_target_properties(${TENSORRT_OPS_TARGET} PROPERTIES
 )
 
 # Add minimal compile options
-target_compile_options(${TENSORRT_OPS_TARGET} PRIVATE 
+target_compile_options(${TENSORRT_OPS_TARGET} PRIVATE
   $<$<COMPILE_LANGUAGE:CXX>:
     -fPIC
     -O2
@@ -149,13 +149,13 @@ target_link_libraries(${PROJECT_NAME}
 # Add dependency to ensure TensorRT plugins are built first
 add_dependencies(${PROJECT_NAME} ${TENSORRT_OPS_TARGET})
 
-target_compile_options(${PROJECT_NAME} PRIVATE 
+target_compile_options(${PROJECT_NAME} PRIVATE
   -Wall -Wextra -Wpedantic
   -Wno-deprecated-declarations
   -Wno-unused-parameter
   -Wno-unused-function
   -Wno-unused-variable
-  -Wno-unused-but-set-variable   
+  -Wno-unused-but-set-variable
 )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)

@@ -56,18 +56,18 @@ namespace tensorrt_bevformer
 class TRTBEVFormerNode : public rclcpp::Node
 {
 private:
-  size_t img_N_;    
-  uint32_t img_w_;  
-  uint32_t img_h_;  
-  int bev_h;        
-  int bev_w;        
+  size_t img_N_;
+  uint32_t img_w_;
+  uint32_t img_h_;
+  int bev_h;
+  int bev_w;
   std::map<std::string, int> model_shape_params_;
   std::map<std::string, std::vector<std::string>> model_output_shapes_;
 
-  std::string engine_file_;  
-  std::string plugin_path_;  
+  std::string engine_file_;
+  std::string plugin_path_;
 
-  std::vector<std::string> class_names_;  
+  std::vector<std::string> class_names_;
 
   std::vector<double> pc_range_;
   std::vector<double> post_center_range_;
@@ -230,7 +230,6 @@ public:
     const autoware_custom_msgs::msg::SceneInfo::ConstSharedPtr & scene_info);
 
   void cameraInfoCallback(int idx, const sensor_msgs::msg::CameraInfo::SharedPtr msg);
-
 };
 
 }  // namespace tensorrt_bevformer

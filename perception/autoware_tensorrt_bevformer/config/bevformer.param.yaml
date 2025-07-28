@@ -10,7 +10,7 @@
       scale_factor: 0.8
       input_width: 1280
       input_height: 720
-    
+
     model_params:
       bev_h: 150
       bev_w: 150
@@ -25,12 +25,12 @@
       workspace_size: 4096
       plugin_path: ""
       precision: "fp16"
-      
+
     post_process_params:
       score_thre: 0.2
       has_twist: true
       debug_mode: false
-      class_names: 
+      class_names:
         - "car"
         - "truck"
         - "construction_vehicle"

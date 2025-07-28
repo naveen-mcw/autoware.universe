@@ -68,9 +68,12 @@ $HOME/autoware_data/tensorrt_bevformer
 
    ```bash
    cd autoware/src
-   git clone https://github.com/naveen-mcw/ros2_dataset_bridge
+   git clone -b feature/bevformer-integration https://github.com/naveen-mcw/ros2_dataset_bridge.git
    cd ..
    ```
+
+   > **Note:**  
+   > The `feature/bevformer-integration` branch provides required data for the BEVFormer.  
 
    Open and edit the launch file to set dataset paths/configs:
 
@@ -83,7 +86,7 @@ $HOME/autoware_data/tensorrt_bevformer
    ```xml
    <arg name="NUSCENES_DIR" default="<nuscenes_dataset_path>"/>
    <arg name="NUSCENES_CAN_BUS_DIR" default="<can_bus_path>"/>
-   <arg name="NUSCENES_VER" default="v1.0-trainval"/> 
+   <arg name="NUSCENES_VER" default="v1.0-trainval"/>
    <arg name="UPDATE_FREQUENCY" default="10.0"/>
    ```
 
@@ -107,17 +110,16 @@ $HOME/autoware_data/tensorrt_bevformer
    ```
 
    > 🧠 **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
-
    > ⚠️ **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** on RTX 2080.
 
 5. Launch TensorRT BEVFormer Node
 
 ```bash
-# 1. Default mode (FP16) 
+# 1. Default mode (FP16)
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml
 
 # 2. FP32 precision mode
-ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32 
+ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32
 
 # 3. Default mode (FP16) with visualization support
 ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml debug_mode:=true
@@ -145,6 +147,6 @@ If you want to train a model using the [TIER IV's internal database (~2600 key f
 
 [1] [BEVFormer (arXiv)](https://arxiv.org/abs/2203.17270)  
 [2] [Original Python BEVFormer TensorRT](https://github.com/DerryHub/BEVFormer_tensorrt.git)  
-[3] [NuScenes Dataset](https://www.nuscenes.org/)   
+[3] [NuScenes Dataset](https://www.nuscenes.org/)  
 
 ---

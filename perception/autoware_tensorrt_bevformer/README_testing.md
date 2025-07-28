@@ -34,10 +34,13 @@ Add this branch to your `autoware_universe/perception` directory.
 ### 2. Play ROS 2 Bag for NuScenes
 
 ```bash
-cd autoware/src
-git clone https://github.com/naveen-mcw/ros2_dataset_bridge
-cd ..
-```
+  cd autoware/src
+  git clone -b feature/bevformer-integration https://github.com/naveen-mcw/ros2_dataset_bridge.git
+  cd ..
+  ```
+
+  > **Note:**  
+  > The `feature/bevformer-integration` branch provides required data for the BEVFormer.
 
 Open and edit the launch file to set dataset paths/configs:
 
@@ -50,7 +53,7 @@ Update as needed:
 ```xml
 <arg name="NUSCENES_DIR" default="<nuscenes_dataset_path>"/>
 <arg name="NUSCENES_CAN_BUS_DIR" default="<can_bus_path>"/>
-<arg name="NUSCENES_VER" default="v1.0-trainval"/> 
+<arg name="NUSCENES_VER" default="v1.0-trainval"/>
 <arg name="UPDATE_FREQUENCY" default="10.0"/>
 ```
 
@@ -74,7 +77,6 @@ ros2 launch ros2_dataset_bridge nuscenes_launch.xml
 ```
 
 > 🧠 **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
-
 > ⚠️ **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** in RTX 2080.
 
 ---

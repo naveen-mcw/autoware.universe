@@ -69,64 +69,60 @@ TRTBEVFormerNode::TRTBEVFormerNode(const rclcpp::NodeOptions & node_options)
   bev_w = this->declare_parameter<int>("model_params.bev_w", 150);
 
   model_shape_params_["batch_size"] = this->declare_parameter<int>("model_params.batch_size", 1);
-  model_shape_params_["cameras"]    = this->declare_parameter<int>("data_params.CAM_NUM", 6);
-  model_shape_params_["img_h"]      = this->declare_parameter<int>("model_params.img_h", 736);
-  model_shape_params_["img_w"]      = this->declare_parameter<int>("model_params.img_w", 1280);
-  model_shape_params_["bev_h"]      = bev_h;
-  model_shape_params_["bev_w"]      = bev_w;
-  model_shape_params_["nb_dec"]     = this->declare_parameter<int>("model_params.nb_dec", 6);
-  model_shape_params_["dim"]        = this->declare_parameter<int>("model_params.dim", 256);
-  model_shape_params_["num_query"]  = this->declare_parameter<int>("model_params.num_query", 900);
-  model_shape_params_["num_classes"]= this->declare_parameter<int>("model_params.num_classes", 10);
-  model_shape_params_["code_size"]  = this->declare_parameter<int>("model_params.code_size", 10);
+  model_shape_params_["cameras"] = this->declare_parameter<int>("data_params.CAM_NUM", 6);
+  model_shape_params_["img_h"] = this->declare_parameter<int>("model_params.img_h", 736);
+  model_shape_params_["img_w"] = this->declare_parameter<int>("model_params.img_w", 1280);
+  model_shape_params_["bev_h"] = bev_h;
+  model_shape_params_["bev_w"] = bev_w;
+  model_shape_params_["nb_dec"] = this->declare_parameter<int>("model_params.nb_dec", 6);
+  model_shape_params_["dim"] = this->declare_parameter<int>("model_params.dim", 256);
+  model_shape_params_["num_query"] = this->declare_parameter<int>("model_params.num_query", 900);
+  model_shape_params_["num_classes"] = this->declare_parameter<int>("model_params.num_classes", 10);
+  model_shape_params_["code_size"] = this->declare_parameter<int>("model_params.code_size", 10);
 
   // Post-process parameters
   score_thre_ = this->declare_parameter<float>("post_process_params.score_thre", 0.2f);
-  has_twist_  = this->declare_parameter<bool>("post_process_params.has_twist", true);
+  has_twist_ = this->declare_parameter<bool>("post_process_params.has_twist", true);
   class_names_ = this->declare_parameter<std::vector<std::string>>(
-    "post_process_params.class_names",
-    {"car", "truck", "bus", "bicycle", "motorcycle", "pedestrian", "traffic_cone", "barrier", "unknown"}
-  );
+    "post_process_params.class_names", {"car", "truck", "bus", "bicycle", "motorcycle",
+                                        "pedestrian", "traffic_cone", "barrier", "unknown"});
   pc_range_ = this->declare_parameter<std::vector<double>>(
-    "post_process_params.pc_range", {-51.2, -51.2, -5.0, 51.2, 51.2, 3.0}
-  );
+    "post_process_params.pc_range", {-51.2, -51.2, -5.0, 51.2, 51.2, 3.0});
   post_center_range_ = this->declare_parameter<std::vector<double>>(
-    "post_process_params.post_center_range", {-61.2, -61.2, -10.0, 61.2, 61.2, 10.0}
-  );
+    "post_process_params.post_center_range", {-61.2, -61.2, -10.0, 61.2, 61.2, 10.0});
 
   // Output shape definitions
   model_output_shapes_["bev_embed"] = this->declare_parameter<std::vector<std::string>>(
-    "model_params.output_shapes.bev_embed", {"bev_h*bev_w", "batch_size", "dim"}
-  );
+    "model_params.output_shapes.bev_embed", {"bev_h*bev_w", "batch_size", "dim"});
   model_output_shapes_["outputs_classes"] = this->declare_parameter<std::vector<std::string>>(
-    "model_params.output_shapes.outputs_classes", {"cameras", "batch_size", "num_query", "num_classes"}
-  );
+    "model_params.output_shapes.outputs_classes",
+    {"cameras", "batch_size", "num_query", "num_classes"});
   model_output_shapes_["outputs_coords"] = this->declare_parameter<std::vector<std::string>>(
-    "model_params.output_shapes.outputs_coords", {"cameras", "batch_size", "num_query", "code_size"}
-  );
+    "model_params.output_shapes.outputs_coords",
+    {"cameras", "batch_size", "num_query", "code_size"});
 
   // Engine and ONNX file parameters
-  engine_file_   = this->declare_parameter<std::string>("model_params.engine_file", "");
-  onnx_file_     = this->declare_parameter<std::string>("model_params.onnx_file", "");
-  workspace_size_= this->declare_parameter<int>("model_params.workspace_size", 4096);
-  auto_convert_  = this->declare_parameter<bool>("model_params.auto_convert", true);
-  plugin_path_   = this->declare_parameter<std::string>("model_params.plugin_path", "");
-  precision_     = this->declare_parameter<std::string>("model_params.precision", "fp16");
-  debug_mode_    = this->declare_parameter<bool>("post_process_params.debug_mode", false);
+  engine_file_ = this->declare_parameter<std::string>("model_params.engine_file", "");
+  onnx_file_ = this->declare_parameter<std::string>("model_params.onnx_file", "");
+  workspace_size_ = this->declare_parameter<int>("model_params.workspace_size", 4096);
+  auto_convert_ = this->declare_parameter<bool>("model_params.auto_convert", true);
+  plugin_path_ = this->declare_parameter<std::string>("model_params.plugin_path", "");
+  precision_ = this->declare_parameter<std::string>("model_params.precision", "fp16");
+  debug_mode_ = this->declare_parameter<bool>("post_process_params.debug_mode", false);
 
   RCLCPP_INFO(this->get_logger(), "Debug mode: %s", debug_mode_ ? "enabled" : "disabled");
 
   // Initialize data structures
-  caminfo_received_      = std::vector<bool>(img_N_, false);
-  cams_intrin_           = std::vector<Eigen::Matrix3d>(img_N_);
-  cams2ego_rot_          = std::vector<Eigen::Quaternion<double>>(img_N_);
-  cams2ego_trans_        = std::vector<Eigen::Translation3d>(img_N_);
+  caminfo_received_ = std::vector<bool>(img_N_, false);
+  cams_intrin_ = std::vector<Eigen::Matrix3d>(img_N_);
+  cams2ego_rot_ = std::vector<Eigen::Quaternion<double>>(img_N_);
+  cams2ego_trans_ = std::vector<Eigen::Translation3d>(img_N_);
   viewpad_matrices_.resize(6);
   sensor2lidar_rotation_.resize(6);
   sensor2lidar_translation_.resize(6);
 
   // Initialize TF buffer and listener
-  tf_buffer_   = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+  tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
   tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
   // Initialize model and subscriptions
@@ -138,9 +134,7 @@ TRTBEVFormerNode::TRTBEVFormerNode(const rclcpp::NodeOptions & node_options)
 
   RCLCPP_INFO(this->get_logger(), "Waiting for camera info...");
   timer_ = this->create_wall_timer(
-    std::chrono::milliseconds(100),
-    std::bind(&TRTBEVFormerNode::checkInitialization, this)
-  );
+    std::chrono::milliseconds(100), std::bind(&TRTBEVFormerNode::checkInitialization, this));
 
   RCLCPP_INFO(this->get_logger(), "=== BEVFormer Node Initialization Complete ===");
 }
@@ -627,8 +621,8 @@ void TRTBEVFormerNode::callback(
 
   PostProcessor postProcessor(
     model_shape_params_["nb_dec"], model_shape_params_["num_query"],
-    model_shape_params_["num_classes"], model_shape_params_["code_size"], score_thre_,
-    max_num, pc_range_, post_center_range_);
+    model_shape_params_["num_classes"], model_shape_params_["code_size"], score_thre_, max_num,
+    pc_range_, post_center_range_);
 
   std::vector<Box3D> batch_results;
   try {
