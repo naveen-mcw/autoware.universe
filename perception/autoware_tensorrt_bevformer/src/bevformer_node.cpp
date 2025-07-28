@@ -470,6 +470,9 @@ void TRTBEVFormerNode::callback(
   const autoware_custom_msgs::msg::CanBusData::ConstSharedPtr & can_bus_msg,
   const autoware_custom_msgs::msg::SceneInfo::ConstSharedPtr & scene_info)
 {
+  
+  auto t_preprocess_start = std::chrono::steady_clock::now();
+
   // Get CAN bus data directly from the synchronized message
   std::vector<float> latest_can_bus = can_bus_msg->can_bus.data;
 
@@ -553,6 +556,12 @@ void TRTBEVFormerNode::callback(
   BEVFormerStructuredInput structured_input = preprocessor_->preprocessImages(
     raw_images, sensor2lidar_rotation_, sensor2lidar_translation_, cams_intrin_);
 
+  auto t_preprocess_end = std::chrono::steady_clock::now();
+  RCLCPP_INFO(this->get_logger(), "Pre-processing : %ld ms",
+              std::chrono::duration_cast<std::chrono::milliseconds>(t_preprocess_end - t_preprocess_start).count());
+
+  auto t_inference_start = t_preprocess_end;
+
   // Apply temporal processing
   std::vector<float> processed_can_bus =
     data_manager_->processCanbusWithTemporal(initial_can_bus, scene_token);
@@ -563,8 +572,6 @@ void TRTBEVFormerNode::callback(
   // Get the previous BEV features
   const std::vector<float> & prev_bev = data_manager_->getPrevBev();
 
-  RCLCPP_INFO(this->get_logger(), "Pre-process complete.");
-
   if (!inference_engine_ || !inference_engine_->isInitialized()) {
     RCLCPP_ERROR(this->get_logger(), "Inference engine is not initialized!");
     return;
@@ -574,6 +581,12 @@ void TRTBEVFormerNode::callback(
   auto [outputs_classes, outputs_coords, bev_embed] = inference_engine_->runInference(
     structured_input.img_tensor, prev_bev, use_prev_bev, processed_can_bus,
     structured_input.lidar2img_flat);
+
+  auto t_inference_end = std::chrono::steady_clock::now();
+  RCLCPP_INFO(this->get_logger(), "Inference : %ld ms",
+              std::chrono::duration_cast<std::chrono::milliseconds>(t_inference_end - t_inference_start).count());
+
+  auto t_postprocess_start = t_inference_end;
 
   // Reshape outputs
   std::map<std::string, std::vector<float>> rawOutputs;
@@ -604,10 +617,13 @@ void TRTBEVFormerNode::callback(
     model_shape_params_["num_classes"], model_shape_params_["code_size"], score_thre_, max_num,
     pc_range_, post_center_range_);
 
+  auto t_postprocess_end = std::chrono::steady_clock::now();
+  RCLCPP_INFO(this->get_logger(), "Post-processing : %ld ms",
+              std::chrono::duration_cast<std::chrono::milliseconds>(t_postprocess_end - t_postprocess_start).count());
+
   std::vector<Box3D> batch_results;
   try {
     batch_results = postProcessor.post_process(reshapedOutputs);
-    RCLCPP_INFO(this->get_logger(), "Post-process complete.");
     RCLCPP_INFO(this->get_logger(), "Detections: %zu", batch_results.size());
     RCLCPP_INFO(this->get_logger(), "--------------------------------------------------");
   } catch (const std::exception & e) {

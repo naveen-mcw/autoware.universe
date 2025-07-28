@@ -794,7 +794,7 @@ BEVFormerInferenceEngine::runInference(
 
     float inference_time_ms = 0.0f;
     CHECK_CUDA(cudaEventElapsedTime(&inference_time_ms, start_event, end_event));
-    RCLCPP_INFO(logger_, "Inference time: %.3f ms", inference_time_ms);
+    RCLCPP_INFO(logger_, "TRT Engine : %.3f ms", inference_time_ms);
 
     // Copy outputs from device
     CHECK_CUDA(cudaMemcpyAsync(
