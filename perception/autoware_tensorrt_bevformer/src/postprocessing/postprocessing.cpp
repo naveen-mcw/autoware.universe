@@ -227,7 +227,7 @@ ResultList GetBboxes(
         bbox[2] = bbox[2] - bbox[5] * 0.5;
       }
     }
-    
+
     detection.bboxes = preds.bboxes;
     detection.scores = preds.scores;
     detection.labels = preds.labels;

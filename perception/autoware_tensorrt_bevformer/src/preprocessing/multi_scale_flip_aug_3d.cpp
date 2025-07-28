@@ -25,8 +25,7 @@ namespace bevformer
 namespace preprocessing
 {
 
-MultiScaleFlipAug3D::MultiScaleFlipAug3D(
-  const std::vector<std::shared_ptr<Transform>> & transforms)
+MultiScaleFlipAug3D::MultiScaleFlipAug3D(const std::vector<std::shared_ptr<Transform>> & transforms)
 {
   compose_ = std::make_shared<Compose>(transforms);
 }

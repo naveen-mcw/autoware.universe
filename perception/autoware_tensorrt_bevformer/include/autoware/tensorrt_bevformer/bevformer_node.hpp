@@ -218,7 +218,7 @@ private:
    * @param msg The input image message.
    * @return The cloned and resized OpenCV Mat image.
    */
-  cv::Mat cloneAndResize(const sensor_msgs::msg::Image::ConstSharedPtr & msg); 
+  cv::Mat cloneAndResize(const sensor_msgs::msg::Image::ConstSharedPtr & msg);
 
 public:
   explicit TRTBEVFormerNode(const rclcpp::NodeOptions & options);

@@ -361,7 +361,7 @@ void TRTBEVFormerNode::cameraInfoCallback(
 
 void TRTBEVFormerNode::calculateStaticLidar2EgoTransform()
 {
-  rclcpp::Time lidar_time = this->now();  
+  rclcpp::Time lidar_time = this->now();
 
   try {
     if (tf_buffer_->canTransform(
@@ -521,10 +521,10 @@ void TRTBEVFormerNode::callback(
   cv::Mat img_fl, img_f, img_fr, img_bl, img_b, img_br;
   try {
     img_fl = cloneAndResize(msg_fl_img);
-    img_f  = cloneAndResize(msg_f_img);
+    img_f = cloneAndResize(msg_f_img);
     img_fr = cloneAndResize(msg_fr_img);
     img_bl = cloneAndResize(msg_bl_img);
-    img_b  = cloneAndResize(msg_b_img);
+    img_b = cloneAndResize(msg_b_img);
     img_br = cloneAndResize(msg_br_img);
   } catch (cv_bridge::Exception & e) {
     RCLCPP_ERROR(this->get_logger(), "CV bridge exception: %s", e.what());

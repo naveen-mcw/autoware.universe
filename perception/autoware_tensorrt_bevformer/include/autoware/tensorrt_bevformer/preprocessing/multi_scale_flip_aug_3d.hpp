@@ -35,8 +35,7 @@ public:
    * @param transforms Vector of transforms to be applied in sequence
    * @param img_scale Target image scale (width, height)
    */
-  MultiScaleFlipAug3D(
-    const std::vector<std::shared_ptr<Transform>> & transforms);
+  explicit MultiScaleFlipAug3D(const std::vector<std::shared_ptr<Transform>> & transforms);
 
   /**
    * @brief Apply the transformation pipeline to input data

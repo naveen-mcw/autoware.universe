@@ -17,7 +17,6 @@ $HOME/autoware_data/tensorrt_bevformer
 ```
 
 - The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.
-  
   - **Results:**
     - NDS: 0.478
     - mAP: 0.370
@@ -40,7 +39,7 @@ Add this branch to your `autoware_universe/perception` directory.
   cd ..
 ```
 
-> **Note:**  The `feature/bevformer-integration` branch provides required data for the BEVFormer.
+> **Note:** The `feature/bevformer-integration` branch provides required data for the BEVFormer.
 
 Open and edit the launch file to set dataset paths/configs:
 

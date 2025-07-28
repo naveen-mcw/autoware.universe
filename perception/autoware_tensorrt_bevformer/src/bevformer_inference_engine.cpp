@@ -660,7 +660,7 @@ BEVFormerInferenceEngine::runInference(
     return std::make_tuple(std::vector<float>(), std::vector<float>(), std::vector<float>());
   }
 
-  // Convert image tensor to vector for comparison 
+  // Convert image tensor to vector for comparison
   std::vector<float> img_tensor_vec(
     img_tensor.ptr<float>(), img_tensor.ptr<float>() + img_tensor.total());
 

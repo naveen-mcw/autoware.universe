@@ -45,8 +45,7 @@ BEVPreprocessingPipeline::BEVPreprocessingPipeline(
     auto format_bundle = std::make_shared<DefaultFormatBundle3DTransform>();
     transforms.push_back(format_bundle);
 
-    multi_scale_flip_aug_ =
-      std::make_shared<MultiScaleFlipAug3D>(transforms);
+    multi_scale_flip_aug_ = std::make_shared<MultiScaleFlipAug3D>(transforms);
   } catch (const std::bad_alloc & e) {
     std::cerr << "Memory allocation failed in BEVPreprocessingPipeline: " << e.what() << std::endl;
     throw;

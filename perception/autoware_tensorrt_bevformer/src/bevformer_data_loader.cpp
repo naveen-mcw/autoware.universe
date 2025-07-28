@@ -29,8 +29,7 @@ namespace tensorrt_bevformer
 
 BEVFormerDataLoader::BEVFormerDataLoader() = default;
 
-cv::Mat BEVFormerDataLoader::createImageTensor(
-  const std::vector<cv::Mat> & images)
+cv::Mat BEVFormerDataLoader::createImageTensor(const std::vector<cv::Mat> & images)
 {
   if (images.size() != 6) {
     RCLCPP_ERROR(
@@ -40,7 +39,7 @@ cv::Mat BEVFormerDataLoader::createImageTensor(
 
   // Get dimensions from first image (now in CHW format)
   const cv::Mat & first_img = images[0];
-  const int channels = first_img.size[0]; 
+  const int channels = first_img.size[0];
   const int img_h = first_img.size[1];
   const int img_w = first_img.size[2];
   const size_t batch_size = 1;
