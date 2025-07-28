@@ -18,9 +18,6 @@
 #include "autoware/tensorrt_bevformer/postprocessing/postprocessing.hpp"
 #include "autoware/tensorrt_bevformer/preprocessing/preprocessing_pipeline.hpp"
 #include "autoware/tensorrt_bevformer/ros_utils.hpp"
-#include "autoware/tensorrt_bevformer/utils/eigen_cv_conversions.hpp"
-
-#include <nlohmann/json.hpp>
 
 #include "autoware_custom_msgs/msg/camera_data.hpp"
 #include "autoware_custom_msgs/msg/can_bus_data.hpp"
@@ -378,7 +375,7 @@ void TRTBEVFormerNode::cameraInfoCallback(
 
 void TRTBEVFormerNode::calculateStaticLidar2EgoTransform()
 {
-  rclcpp::Time lidar_time = this->now();  // Or set to your reference LiDAR timestamp
+  rclcpp::Time lidar_time = this->now();  
 
   try {
     if (tf_buffer_->canTransform(

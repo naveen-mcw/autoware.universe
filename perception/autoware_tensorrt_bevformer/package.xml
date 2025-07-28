@@ -22,7 +22,6 @@
   <depend>eigen</depend>
   <depend>geometry_msgs</depend>
   <depend>message_filters</depend>
-  <depend>nlohmann-json</depend>
   <depend>opencv</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>

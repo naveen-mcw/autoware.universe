@@ -222,12 +222,12 @@ ResultList GetBboxes(
     auto & preds = preds_dicts[i];
     auto & bboxes = preds.bboxes;
 
-    // Equivalent to bboxes[:, 2] = bboxes[:, 2] - bboxes[:, 5] * 0.5
     for (auto & bbox : bboxes) {
       if (bbox.size() > 5) {
         bbox[2] = bbox[2] - bbox[5] * 0.5;
       }
     }
+    
     detection.bboxes = preds.bboxes;
     detection.scores = preds.scores;
     detection.labels = preds.labels;

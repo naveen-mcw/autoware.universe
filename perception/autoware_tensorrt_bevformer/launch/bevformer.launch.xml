@@ -8,7 +8,7 @@
   <arg name="input/img_b" default="/nuscenes/CAM_BACK/image"/>
   <arg name="input/img_br" default="/nuscenes/CAM_BACK_RIGHT/image"/>
 
-  <!-- CAN bus and pose topics -->
+  <!-- CAN bus and scene topics -->
   <arg name="input/can_bus" default="/nuscenes/can_bus"/>
   <arg name="input/scene_token" default="/nuscenes/scene_tokens"/>
 
@@ -23,8 +23,8 @@
   <arg name="input/img_br/camera_info" default="/nuscenes/CAM_BACK_RIGHT/camera_info"/>
 
   <!-- Engine and ONNX paths -->
-  <arg name="onnx_file" default="$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small_epoch_24_cp.onnx"/>
-  <arg name="engine_file" default="$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small_epoch_24_cp.engine"/>
+  <arg name="onnx_file" default="$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small.onnx"/>
+  <arg name="engine_file" default="$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small.engine"/>
   <arg name="auto_convert" default="true"/>
   <arg name="workspace_size" default="4096"/>
   <arg name="precision" default="fp16"/>

@@ -176,16 +176,6 @@ float BEVFormerDataManager::getUsePrevBev(const std::string & scene_token)
 void BEVFormerDataManager::updatePrevBev(const std::vector<float> & bev_embed)
 {
   prev_bev_ = bev_embed;
-
-  // Calculate mean for logging
-  float mean = 0.0f;
-  if (!bev_embed.empty()) {
-    size_t sample_size = std::min(bev_embed.size(), size_t(1000));
-    for (size_t i = 0; i < sample_size; ++i) {
-      mean += bev_embed[i];
-    }
-    mean /= sample_size;
-  }
 }
 
 }  // namespace tensorrt_bevformer

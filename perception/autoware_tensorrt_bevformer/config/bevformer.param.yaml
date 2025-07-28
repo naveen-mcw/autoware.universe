@@ -19,8 +19,8 @@
       num_query: 900
       num_classes: 10
       code_size: 10
-      engine_file: "$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small_epoch_24_cp.engine"
-      onnx_file: "$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small_epoch_24_cp.onnx"
+      engine_file: "$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small.engine"
+      onnx_file: "$(env HOME)/autoware_data/tensorrt_bevformer/bevformer_small.onnx"
       auto_convert: true
       workspace_size: 4096
       plugin_path: ""

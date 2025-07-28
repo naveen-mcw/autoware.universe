@@ -139,7 +139,7 @@ private:
   bool camera_info_received_flag_ = false;
   bool initialized_ = false;  // Flag indicating if img_w_ and img_h_ has been initialized
 
-  // ADD these synchronized subscribers:
+  // can_bus and scene_info subscriptions
   message_filters::Subscriber<autoware_custom_msgs::msg::CanBusData> sub_can_bus_;
   message_filters::Subscriber<autoware_custom_msgs::msg::SceneInfo> scene_info_sub_;
 

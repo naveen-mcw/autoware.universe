@@ -101,16 +101,6 @@ public:
   std::vector<int64_t> getInputLidar2imgShape() const { return input_shape_lidar2img_; }
   std::vector<int64_t> getOutputBevEmbedShape() const { return output_shape_bev_embed_; }
 
-  /**
-   * @brief Save input or output tensor data to file for debugging
-   *
-   * @param data Vector of float data to save
-   * @param name Name of the tensor (for filename)
-   * @param token Optional token identifier (e.g., sample ID)
-   */
-  void saveDebugTensor(
-    const std::vector<float> & data, const std::string & name, const std::string & token = "");
-
 private:
   // TensorRT engine components
   nvinfer1::IRuntime * runtime_ = nullptr;
@@ -143,25 +133,11 @@ private:
   std::vector<int64_t> output_shape_outputs_classes_;
   std::vector<int64_t> output_shape_outputs_coords_;
 
-  // Flag to enable saving debug tensors
-  bool save_debug_tensors_ = true;
-
   // Helper function to read the engine file
   std::vector<char> readEngineFile(const std::string & engine_file);
 
   // Helper function to get tensor shapes from the engine
   void getTensorShapes();
-
-  /**
-   * @brief Compare two tensors for debugging
-   *
-   * @param tensor1 First tensor
-   * @param tensor2 Second tensor
-   * @param epsilon Threshold for considering values different
-   * @return bool True if tensors are similar within epsilon
-   */
-  bool compareTensors(
-    const std::vector<float> & tensor1, const std::vector<float> & tensor2, float epsilon = 1e-5);
 
   // New helper methods for engine building
   bool saveEngineToDisk(const std::vector<char> & engine_data, const std::string & engine_file);

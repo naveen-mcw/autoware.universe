@@ -14,8 +14,6 @@
 
 #include "autoware/tensorrt_bevformer/bevformer_preprocessor.hpp"
 
-#include "autoware/tensorrt_bevformer/utils/eigen_cv_conversions.hpp"
-
 #include <rclcpp/logging.hpp>
 #include <rclcpp/node.hpp>
 

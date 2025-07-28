@@ -26,7 +26,6 @@ namespace bevformer
 namespace preprocessing
 {
 
-// Abstract Transform base class
 class Transform
 {
 public:
@@ -47,7 +46,6 @@ private:
   std::vector<std::shared_ptr<Transform>> transforms_;
 };
 
-// Forward declarations of all transform classes
 class LoadMultiViewImageFromFiles;
 class NormalizeMultiviewImage;
 class RandomScaleImageMultiViewImageTransform;

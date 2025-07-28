@@ -25,7 +25,6 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(autoware_custom_msgs REQUIRED)
-find_package(nlohmann_json REQUIRED)
 find_package(visualization_msgs REQUIRED)
 
 include_directories(
@@ -141,7 +140,6 @@ target_link_libraries(${PROJECT_NAME}
   ${TENSORRT_LIBS}
   ${NVONNXPARSER_LIB}
   ${TENSORRT_OPS_TARGET}  # Link with our custom TensorRT plugins
-  nlohmann_json::nlohmann_json
   dl  # Add dl library for dlopen/dlsym
   ament_index_cpp::ament_index_cpp
 )

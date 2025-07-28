@@ -14,7 +14,6 @@
 
 #include "../../include/autoware/tensorrt_bevformer/preprocessing/augmentation_transforms.hpp"
 
-#include <nlohmann/json.hpp>
 #include <rclcpp/logging.hpp>
 
 #include <algorithm>

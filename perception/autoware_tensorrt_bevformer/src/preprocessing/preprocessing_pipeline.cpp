@@ -31,22 +31,17 @@ BEVPreprocessingPipeline::BEVPreprocessingPipeline(
   int pad_divisor, float scale_factor, int input_width, int input_height)
 {
   try {
-    // NormalizeMultiviewImage with mean/std/to_rgb from config
     normalize_multiview_images_ =
       std::make_shared<NormalizeMultiviewImage>(img_mean, img_std, to_rgb);
 
-    // MultiScaleFlipAug3D with nested transforms
     std::vector<std::shared_ptr<Transform>> transforms;
 
-    // RandomScaleImageMultiViewImage with scales=[0.8]
     auto random_scale = std::make_shared<RandomScaleImageMultiViewImageTransform>(scale_factor);
     transforms.push_back(random_scale);
 
-    // PadMultiViewImage with size_divisor=32
     auto pad_img = std::make_shared<PadMultiViewImageTransform>(nullptr, pad_divisor);
     transforms.push_back(pad_img);
 
-    // DefaultFormatBundle3D with class_names and with_label=False
     auto format_bundle = std::make_shared<DefaultFormatBundle3DTransform>();
     transforms.push_back(format_bundle);
 

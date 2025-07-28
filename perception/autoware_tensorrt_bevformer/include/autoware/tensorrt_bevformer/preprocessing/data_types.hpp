@@ -29,7 +29,6 @@ namespace bevformer
 namespace preprocessing
 {
 
-// Forward declaration for DataDict
 class DataDict;
 
 // A variant type that can store different types of data
@@ -43,8 +42,6 @@ class DataDict : public std::map<std::string, DataValue>
 public:
   // Default constructor
   DataDict() = default;
-
-  // Remove the problematic copy constructor with initializer list
 
   // Check if a key corresponds to a nested dictionary
   bool isNestedDict(const std::string & key) const

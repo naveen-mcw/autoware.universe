@@ -81,10 +81,6 @@ void getTransform(
   const geometry_msgs::msg::TransformStamped & transform_stamped,
   Eigen::Quaternion<double> & rotation, Eigen::Translation3d & translation);
 
-// Transfer images to GPU memory
-void imageTransport(
-  const std::vector<cv::Mat> & imgs, uchar * imgs_dev, uint32_t img_w, uint32_t img_h);
-
 }  // namespace tensorrt_bevformer
 }  // namespace autoware
 

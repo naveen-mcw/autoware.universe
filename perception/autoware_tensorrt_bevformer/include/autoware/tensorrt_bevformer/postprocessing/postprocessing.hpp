@@ -15,8 +15,6 @@
 #pragma once
 #include "autoware/tensorrt_bevformer/ros_utils.hpp"
 
-#include <nlohmann/json.hpp>
-
 #include <yaml-cpp/yaml.h>
 
 #include <algorithm>
@@ -54,8 +52,6 @@ using ResultList = std::vector<Detection>;
 class PostProcessor
 {
 public:
-  // PostProcessor(const std::string& configFile =
-  // "/home/dhinesh/Project/BEVFormer_tensorrt/Post_Processing_CPP/config.yaml");
   PostProcessor(
     int nb_dec, int num_query, int cls_out_channels, int bbox_dims, float score_thr, int max_num,
     const std::vector<double> & pc_range, const std::vector<double> & post_center_range);
