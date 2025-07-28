@@ -76,8 +76,9 @@ Launch tools:
 ros2 launch ros2_dataset_bridge nuscenes_launch.xml
 ```
 
-> 🧠 **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
-> ⚠️ **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** in RTX 2080.
+> **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
+> 
+> **Note:** ROS bag playback is limited to **10 Hz**, constraining BEVFormer node to the same. BEVFormer achieves up to **5 FPS (FP16)** in RTX 2080.
 
 ---
 
