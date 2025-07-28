@@ -69,8 +69,7 @@ $HOME/autoware_data/tensorrt_bevformer
    cd ..
    ```
 
-   > **Note:**  
-   > The `feature/bevformer-integration` branch provides required data for the BEVFormer.
+   > **Note:**  The `feature/bevformer-integration` branch provides required data for the BEVFormer.
 
    Open and edit the launch file to set dataset paths/configs:
 
@@ -110,19 +109,19 @@ $HOME/autoware_data/tensorrt_bevformer
 
 5. Launch TensorRT BEVFormer Node
 
-```bash
-# Default mode (FP16)
-ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml
-
-# FP32 precision
-ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32
-
-# With visualization
-ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml debug_mode:=true
-
-# FP32 + visualization
-ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32 debug_mode:=true
-```
+   ```bash
+   # Default mode (FP16)
+   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml
+   
+   # FP32 precision
+   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32
+   
+   # With visualization
+   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml debug_mode:=true
+   
+   # FP32 + visualization
+   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32 debug_mode:=true
+   ```
 
 ### Configuration
 
