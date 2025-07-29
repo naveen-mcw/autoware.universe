@@ -9,7 +9,7 @@ The core algorithm, named `BEVFormer`, unifies multi-view images into the BEV pe
 ### Cite
 
 - Zhicheng Wang, et al., "BEVFormer: Incorporating Transformers for Multi-Camera 3D Detection" [[ref](https://arxiv.org/abs/2203.17270)]
-- The Node is ported and adapted from the [original Python implementation by DerryHub](https://github.com/DerryHub/BEVFormer_tensorrt.git), re-written for Autoware with C++/TensorRT support.
+- The Node is ported and adapted from the [Python implementation by DerryHub](https://github.com/DerryHub/BEVFormer_tensorrt.git), re-written for Autoware with C++/TensorRT support.
 
 ## Inputs / Outputs
 
@@ -29,7 +29,7 @@ The core algorithm, named `BEVFormer`, unifies multi-view images into the BEV pe
 | `~/input/topic_img_back_left/camera_info`   | `sensor_msgs::msg::CameraInfo`          | input back_left camera parameters   |
 | `~/input/topic_img_back/camera_info`        | `sensor_msgs::msg::CameraInfo`          | input back camera parameters        |
 | `~/input/topic_img_back_right/camera_info`  | `sensor_msgs::msg::CameraInfo`          | input back_right camera parameters  |
-| `~/input/scene_token`                       | `autoware_custom_msgs::msg::SceneInfo`  | NuScenes scene token                |
+| `~/input/scene_token`                       | `autoware_custom_msgs::msg::SceneInfo`  | nuScenes scene token                |
 | `~/input/can_bus`                           | `autoware_custom_msgs::msg::CanBusData` | CAN bus data for ego-motion         |
 
 ### Outputs
@@ -47,21 +47,21 @@ The core algorithm, named `BEVFormer`, unifies multi-view images into the BEV pe
 - **CUDA** 12.4
 - **cuDNN** 8.9.2
 
-### Trained Models
+### Trained Model
 
-Download the [`bevformer_small.onnx`](https://multicorewareinc1-my.sharepoint.com/:u:/g/personal/naveen_sathiyaseelan_multicorewareinc_com/ERQSpS-BoAZGh4R4zNZhITcB58aqDW_tu9aKHLpit6aLAg?e=IZ5nZN) trained model to:
+Download the [`bevformer_small.onnx`](https://multicorewareinc1-my.sharepoint.com/:u:/g/personal/naveen_sathiyaseelan_multicorewareinc_com/ERQSpS-BoAZGh4R4zNZhITcB58aqDW_tu9aKHLpit6aLAg?e=IZ5nZN) model to:
 
 ```bash
 $HOME/autoware_data/tensorrt_bevformer
 ```
 
-- The **BEVFormer** model was trained on the **NuScenes** dataset for 24 epochs with temporal fusion enabled.
+> **Note:** The **BEVFormer** model was trained on the **nuScenes** dataset for 24 epochs with temporal fusion enabled.
 
-### Test TensorRT BEVFormer Node with NuScenes
+### Test TensorRT BEVFormer Node with nuScenes
 
 1. Integrate this package into your **autoware_universe/perception** directory.
 
-2. To play ROS 2 bag of NuScenes data:
+2. To play ROS 2 bag of nuScenes data:
 
    ```bash
    cd autoware/src
@@ -70,6 +70,8 @@ $HOME/autoware_data/tensorrt_bevformer
    ```
 
    > **Note:**  The `feature/bevformer-integration` branch provides required data for the BEVFormer.
+
+   Download nuScenes dataset and canbus data [here](https://www.nuscenes.org/nuscenes#).
 
    Open and edit the launch file to set dataset paths/configs:
 
@@ -80,16 +82,23 @@ $HOME/autoware_data/tensorrt_bevformer
    Update as needed:
 
    ```xml
-   <arg name="NUSCENES_DIR" default="<nuscenes_dataset_path>"/>
+   <arg name="NUSCENES_DIR" default="<nuScenes_dataset_path>"/>
    <arg name="NUSCENES_CAN_BUS_DIR" default="<can_bus_path>"/>
    <arg name="NUSCENES_VER" default="v1.0-trainval"/>
    <arg name="UPDATE_FREQUENCY" default="10.0"/>
    ```
 
-3. Build Autoware:
+3. Build the autoware_tensorrt_bevfomer and ros2_dataset_bridge packages
 
    ```bash
-   colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+   # Build ros2_dataset_bridge
+   
+   colcon build --packages-up-to ros2_dataset_bridge
+   
+   # Build autoware_tensorrt_bevformer
+
+   colcon build --packages-up-to autoware_tensorrt_bevformer
+  
    ```
 
    Source environments:
@@ -105,22 +114,22 @@ $HOME/autoware_data/tensorrt_bevformer
    ros2 launch ros2_dataset_bridge nuscenes_launch.xml
    ```
 
-   > **Tip:** If NuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
+   > **Tip:** If nuScenes boxes aren't visible in RViz, uncheck **Stop** in the GUI controller, then click **OK**.
 
 5. Launch TensorRT BEVFormer Node
 
    ```bash
    # Default mode (FP16)
-   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml
+   ros2 launch autoware_tensorrt_bevformer bevformer.launch.xml
    
    # FP32 precision
-   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32
+   ros2 launch autoware_tensorrt_bevformer bevformer.launch.xml precision:=fp32
    
    # With visualization
-   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml debug_mode:=true
+   ros2 launch autoware_tensorrt_bevformer bevformer.launch.xml debug_mode:=true
    
    # FP32 + visualization
-   ros2 launch autoware_tensorrt_bevformer tensorrt_bevformer.launch.xml precision:=fp32 debug_mode:=true
+   ros2 launch autoware_tensorrt_bevformer bevformer.launch.xml precision:=fp32 debug_mode:=true
    ```
 
 ### Configuration
@@ -132,12 +141,12 @@ The configuration file in `config/bevformer.param.yaml` can be modified to suit 
 
 ## Limitation
 
-The model is trained on the open-source dataset **NuScenes** and may have poor generalization on your own dataset. If you want to use this model for your data, you need to retrain it.
+The model is trained on the open-source dataset **nuScenes** and may have poor generalization on your own dataset. If you want to use this model for your data, you need to retrain it.
 
 ## References/External links
 
 [1] [BEVFormer (arXiv)](https://arxiv.org/abs/2203.17270)  
 [2] [Original Python BEVFormer TensorRT](https://github.com/DerryHub/BEVFormer_tensorrt.git)  
-[3] [NuScenes Dataset](https://www.nuscenes.org/)
+[3] [nuScenes Dataset](https://www.nuscenes.org/)
 
 ---
