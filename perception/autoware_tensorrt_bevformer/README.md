@@ -139,10 +139,6 @@ The configuration file in `config/bevformer.param.yaml` can be modified to suit 
 - Modify `precision` to `fp16` or `fp32`
 - Set `debug_mode` to `true` to enable publishing bounding box markers.
 
-## Limitation
-
-The model is trained on the open-source dataset **nuScenes** and may have poor generalization on your own dataset. If you want to use this model for your data, you need to retrain it.
-
 ## References/External links
 
 [1] [BEVFormer (arXiv)](https://arxiv.org/abs/2203.17270)  
